@@ -1,0 +1,22 @@
+@startuml
+actor User
+participant "AES Algorithm" as AES
+participant "Key Expansion" as KE
+
+User -> AES: Provide plaintext (128 bits) and secret key
+AES -> KE: Expand the key
+KE -> AES: Round keys K_r
+
+AES -> AES: AddRoundKey (Initial Round)
+note right: S(x) = P XOR K_0
+
+loop Main Rounds (1 to Nr - 1)
+    AES -> AES: SubBytes
+    AES -> AES: ShiftRows
+    AES -> AES: MixColumns
+    AES -> AES: AddRoundKey (K_r)
+end
+
+AES -> AES: Final Round (No MixColumns)
+AES -> User: Output ciphertext block
+@enduml
